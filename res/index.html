@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<head>
+    <script src="api.js"></script>
+    <!-- <script src="vue"></script> -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        #vue_main {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        a {
+            width: 100%;
+        }
+
+        .dirs {
+            font-size: xx-large;
+        }
+
+        .files {
+            font-size: xx-large;
+        }
+
+        .back {
+            font-size: xx-large;
+        }
+
+        .file_display {
+            width: 100%;
+            display: flex;
+        }
+
+        a {
+            background-color: aquamarine;
+            border-style: solid;
+
+        }
+    </style>
+</head>
+
+<body>
+<div id="vue_main" class="vue_main">
+    <a
+            class="back"
+            :href="back_link"
+            class="back"
+    >back</a>
+    ################################################
+    <a
+            v-for="l in this.dir_links"
+            :href="l.link"
+            class="dirs"
+    >
+        {{l.file_type}}: {{l.name}}
+    </a>
+    {{dir_split}}
+    <a
+            v-for="l in this.file_links"
+            :href="l.link"
+            class="files"
+    >
+        {{l.file_type}}: {{l.name}}
+    </a>
+    <file_display
+            v-for="info in this.file_entries"
+            :size="[90,10,20]"
+            :file_info="info"
+    ></file_display>
+</div>
+
+
+<script>
+    const splter = "################################################";
+    let url = new URL(window.location.href);
+    let _path = url.searchParams.get("path");
+    if (_path == null) {
+        _path = "";
+    } else if (_path.startsWith("/")) {
+        _path = _path.slice(1, _path.length)
+    }
+    const path = _path;
+
+    console.log(path);
+
+
+    let file_info_example = {
+        "name": "api.rs",
+        "file_type": "file",
+        "is_dir": false,
+        "is_file": true,
+        "created_time": {"secs_since_epoch": 1690639581, "nanos_since_epoch": 460874000},
+        "accessed_time": {"secs_since_epoch": 1694243244, "nanos_since_epoch": 961673800},
+        "modified_time": {"secs_since_epoch": 1691995450, "nanos_since_epoch": 268019300},
+        "size": 435,
+        "file_name": "api.rs",
+        "extend_name": "rs",
+        "has_extend_name": true
+    };
+    // class FileInfo{
+    //     constructor(name,file_type,is_dir,is_file,created_time,accessed_time,modified_time,size,file_name,extend_name,has_extend_name) {
+    //
+    //
+    //     }
+    // }
+
+
+    const FileDisplay = {
+        props: {
+            file_info: Object,
+            size: Array
+        },
+        data() {
+            return {};
+        },
+        computed: {
+            file_name: function () {
+                return this.file_info.name;
+            },
+            download_url: function () {
+                let link = FILE_ROOT_ + path + "/" + this.file_info.name;
+                return link;
+            },
+            style_obj: function () {
+                let create_style = (width) => {
+                    return {
+                        width: Number(width) + "%",
+                        height: "100%",
+                        textOverflow: "ellipsis",
+                        whiteSpace:"nowrap",
+                        overflow:"hidden"
+                    };
+                }
+                return {
+                    name: create_style(this.size[0]),
+                    download: create_style(this.size[1]),
+                }
+            }
+        },
+        template:
+            '<div class="file_display">' +
+            '' +
+            '<a ' +
+            'class="file_name" :style="this.style_obj.name"' +
+            '>' +
+            '{{file_name}}----{{download_url}}' +
+            '</a>' +
+            '' +
+            '<a class="download_link" :style="this.style_obj.download" :href="this.download_url">下啊啊啊啊啊啊啊啊啊啊啊啊载</a>' +
+            '' +
+            '</div>'
+    }
+
+
+    const App1 = {
+        data() {
+            return {
+                info: [],
+                entries: [],
+            }
+        },
+        computed: {
+            back_link: function () {
+                let name = path.split('/').pop();
+                let other = path.slice(0, path.length - name.length);
+                if (other.endsWith("/")) {
+                    other = other.slice(0, other.length - 1);
+                }
+                // console.log(name);
+                // console.log(other);
+                return INDEX + "?path=" + other;
+            },
+            all_links: function () {
+                let l = this.entries.map((value, index, array) => {
+                    // console.log(value);
+                    let link = "";
+                    if (value.file_type === "file") {
+                        link = FILE_ROOT_ + path + "/" + value.name;
+                    } else {
+                        link = INDEX + "?path=" + path + "/" + value.name;
+                    }
+                    return {
+                        file_type: value.file_type,
+                        name: value.name,
+                        link: link + "\n",
+                    };
+                });
+                l.sort((a, b) => {
+                    if (a.file_type !== b.file_type) {
+                        return a.file_type > b.file_type;
+                    }
+                    return a.name > b.name;
+                })
+                return l;
+            },
+            dir_links: function () {
+                let l = this.all_links.filter((value) => {
+                    return value.file_type === "dir";
+                });
+                l.sort(
+                    (a, b) => {
+                        return a.name > b.name;
+                    }
+                );
+                return l;
+            },
+            file_links: function () {
+                let l = this.all_links.filter((value) => {
+                    return value.file_type === "file";
+                });
+                l.sort(
+                    (a, b) => {
+                        return a.name > b.name;
+                    }
+                );
+                return l;
+            },
+            dir_split: function () {
+                if (this.dir_links.length > 0) {
+                    return splter;
+                } else {
+                    return "";
+                }
+            },
+
+            file_entries: function () {
+                let out = this.entries.filter((value) => {
+                    // console.log(value.is_file)
+                    return value.is_file;
+                });
+                out.sort((a, b) => {
+                    return a.name > b.name;
+                })
+                return out;
+            },
+            dir_entries: function () {
+                let out = this.entries.filter((value) => {
+                    return value.is_dir;
+                });
+                out.sort((a, b) => {
+                    return a.name > b.name;
+                });
+                return out;
+            }
+
+        }
+    }
+
+    let app = Vue.createApp(App1);
+    app.component("file_display", FileDisplay)
+    // app.component("sel_bar", SelectBar);
+
+    var app_mounted = app.mount('#vue_main');
+
+
+    {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', INFO_ROOT_ + path);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                app_mounted.info = JSON.parse(xhr.responseText);
+                app_mounted.entries = app_mounted.info.entries;
+            } else {
+                console.log('Error: ' + xhr.status);
+            }
+        };
+    }
+
+</script>
+</body>
