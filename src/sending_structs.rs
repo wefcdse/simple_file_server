@@ -1,4 +1,4 @@
-use std::{ffi::OsString, time::SystemTime};
+use std::time::SystemTime;
 
 use serde::ser::SerializeStruct;
 
@@ -58,7 +58,7 @@ impl serde::Serialize for PathEntryType {
         let mut file_type = serializer.serialize_struct("FileType", 3)?;
         file_type.serialize_field("file_type", type_name)?;
         file_type.serialize_field("is_dir", &is_dir)?;
-        file_type.serialize_field("is_file", &is_file);
+        file_type.serialize_field("is_file", &is_file)?;
         file_type.end()
     }
 }

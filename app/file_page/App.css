@@ -1,0 +1,39 @@
+#root {
+    width: 100%;
+}
+
+.top_bar {
+    height: 2.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+#back_link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#display_name {
+    font-size: large;
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#download_link {
+    font-size: large;
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+#display_size {
+    font-size: large;
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+}

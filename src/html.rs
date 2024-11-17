@@ -1,3 +1,4 @@
+#![allow(unused)]
 use axum::{response::Html, routing::get, Router};
 use stupid_utils::predule::*;
 use tokio::fs;

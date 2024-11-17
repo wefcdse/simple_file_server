@@ -1,0 +1,40 @@
+pre {
+    width: 90%;
+    overflow: hidden;
+    padding: 1rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    border-style: solid;
+    border-radius: 0rem;
+    word-wrap: break-word;
+    overflow-x: scroll;
+}
+
+#text_disp {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+audio {
+    width: 80%;
+}
+
+#audio_disp {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+#video_disp {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+#picture_disp {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}

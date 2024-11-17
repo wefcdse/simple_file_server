@@ -1,16 +1,16 @@
-use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
-
 use axum::{
     extract::{Path, State},
     routing::get,
     Router,
 };
+use simple_file_server::serve_included_file;
+use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 mod api;
 mod dir_info;
+mod generated;
 mod global_state;
 mod html;
 mod sending_structs;
-
 use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(author="eqf", version, about, long_about = None)]
@@ -41,8 +41,12 @@ async fn main() {
             }),
         )
         .with_state("./".to_owned())
+        .route(
+            "/test/main",
+            get(serve_included_file!("../res/vue.global.prod.js")),
+        )
         .nest_service("/file", tower_http::services::ServeDir::new("./"))
-        .merge(html::get_html_router());
+        .merge(generated::generate_router());
 
     // run it with hyper on localhost:3000
     let addr = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), args.port));
@@ -52,5 +56,3 @@ async fn main() {
         .await
         .unwrap();
 }
-
-use tower_http::services::fs::ServeFile;

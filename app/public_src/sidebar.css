@@ -1,0 +1,33 @@
+#sidebar {
+    z-index: 100000;
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    background-color: black;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+    transition: transform 0.5s;
+}
+
+.hide {
+    transform: translate(-250px, 0px);
+}
+
+.full_width {
+    width: 100%;
+}
+
+.no_border_radius {
+    border-radius: 0;
+}
+
+#sidebar_link_home {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: xx-large;
+    height: 4rem;
+}

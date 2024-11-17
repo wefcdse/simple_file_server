@@ -1,0 +1,60 @@
+.entry_bar {
+    width: 100%;
+    height: 2.5rem;
+    background-color: aqua;
+    /* border-style: dotted; */
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    font-size: large;
+    border-radius: 0.5rem;
+    box-shadow: -0.1rem 0 3px 5px rgba(2, 34, 90, 0.1);
+    margin-bottom: calc(0.4rem);
+}
+
+.name {
+    text-align: left;
+    position: absolute;
+    left: 0.8rem;
+    overflow: hidden;
+    width: 40%;
+    /* border-style: groove; */
+    /* border-width: 0%; */
+    background-color: azure;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.entry_type {
+    position: absolute;
+    left: calc(0.8rem + 40%);
+    width: calc(5% - 0.8rem);
+    padding: 0;
+    background-color: blanchedalmond;
+    /* border-style: groove; */
+}
+
+.size {
+    position: absolute;
+    left: 45%;
+    width: 10%;
+    text-align: right;
+    white-space: nowrap;
+
+}
+
+.extend_name {
+    position: absolute;
+    left: 55%;
+    width: 10%;
+    text-align: right;
+
+}
+
+.download_link {
+    background-color: azure;
+    text-align: right;
+    position: absolute;
+    right: 0.8rem;
+}
